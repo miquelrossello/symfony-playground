@@ -1,0 +1,29 @@
+version: "3.7"
+
+networks:
+  symfony_playground_network:
+
+services:
+  app:
+    build:
+      context: docker/app
+      dockerfile: App.DockerFile
+    container_name: symfony_playground_app
+    ports:
+      - "9000:9000"
+    volumes:
+      - "./:/var/www/symfony-playground"
+    networks:
+      - symfony_playground_network
+  web:
+    build:
+      context: docker/web
+      dockerfile: Web.DockerFile
+    container_name: symfony_playground_web
+    ports:
+      - "80:80"
+    volumes:
+      - "./:/var/www/symfony-playground"
+      - "./docker/web/app.conf:/etc/nginx/conf.d/default.conf"
+    networks:
+      - symfony_playground_network
